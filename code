@@ -1,0 +1,345 @@
+db.php
+<?php
+
+
+$dbServername="localhost";
+$dbUsername="root";
+$dbPassword="";
+$dbname="emp";
+
+
+$conn=mysqli_connect($dbServername,$dbUsername,$dbPassword,$dbname);
+?>
+
+delete.php
+<?php
+include_once 'db.php';
+$eno=$_GET['eno'];
+
+
+$sql="DELETE FROM EMP WHERE id='$eno';";
+mysqli_query($conn,$sql);
+header("location:http://localhost/dbms/main.html?");
+?>
+
+
+delete1.php
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inserting</title>
+    <style> 
+    body {
+            background-image: url("https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000");
+
+
+        }
+input[name]{
+  width: 20%;
+  padding: 10px 50px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  text-align:center;
+  
+  color: black;
+}
+</style>
+</head>
+
+
+<body>
+    <center>
+    <form action="delete.php" method="GET">
+        <label for="eno">EMPLOYEE ID:</label>
+    <input type="number" name="eno" id="eno" placeholder="ENO" min="100" max="200">
+    <br>
+    <button type="submit" name="submit">DELETE</button>
+    </center>
+    </form>
+</body>
+
+
+</html>
+
+index.php
+<?php
+    include_once 'db.php';
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-image: url("https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000");
+
+
+        }
+table {
+border-collapse: collapse;
+width: 50%;
+color: #588c7e;
+font-family: monospace;
+font-size: 25px;
+text-align: center;
+}
+th {
+background-color: #588c7e;
+color: white;
+}
+tr:nth-child(even) {background-color: #f2f2f2}
+button {
+  background-color: #04AA6D;
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Designation</th>
+            </tr>
+        </thead>
+    <tbody>
+<?php
+    $sql="SELECT * FROM EMP;";
+    $result=mysqli_query($conn,$sql);
+    $resultCheck = mysqli_num_rows($result);
+    
+    if($resultCheck > 0)
+    {
+        while($row=mysqli_fetch_assoc($result))
+        {
+            echo "<tr><td>".$row['id']."</td><td>".$row['name']."</td><td>".$row['desig']."</td></tr>";
+        }
+            
+    }
+    ?>
+    
+    </tbody>
+    </table>
+    <br>
+    <center>
+    <form action="http://localhost/dbms/main.html">
+    <button>BACK</button>
+    </center>
+
+
+insert.html
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charsepothum t="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inserting</title>
+</head>
+
+
+<body>
+    <form action="insert1.php" method="POST">
+        <input type="number" name="eno" id="eno" placeholder="ENO" min="100" max="200">
+        <br>
+        <input type="text" name="name" id="name" placeholder="name">
+        <br>
+        <button type="submit" name="submit">INSERT</button>
+    </form>
+</body>
+
+
+</html>
+
+insert.php
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inserting</title>
+    <style> 
+    body {
+            background-image: url("https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000");
+
+
+        }
+input[name]{
+  width: 20%;
+  padding: 10px 50px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  text-align:center;
+  
+  color: black;
+}
+</style>
+</head>
+
+
+<body>
+    <center>
+    <form action="insert1.php" method="GET">
+        <label for="eno2">EMPLOYEE ID:</label>
+    <input type="number" name="eno" id="eno2" placeholder="ENO" min="100" max="200">
+    <br>
+    <label for="eno">EMPLOYEE NAME:</label>
+    <input type="text" name="name" id="name">
+    <br>
+    <label for="desig">DESIGNATION:</label>
+    <input type="text" name="desig" id="desig">
+    <br>
+    <button type="submit" name="submit">INSERT</button>
+</center>
+    </form>
+</body>
+
+
+</html>
+
+
+insert1.php
+<?php
+include_once 'db.php';
+$name=$_GET['name'];
+$select=mysqli_query($conn,"SELECT * FROM emp where name='$name';");
+
+
+if ($select->num_rows>0){
+    echo "ALREADY THERE RA";
+    
+}
+else{
+    $eno=$_GET['eno'];
+    
+    $desig=$_GET['desig'];
+    $sql="INSERT INTO EMP (id,name,desig) VALUES('$eno','$name','$desig');";
+    mysqli_query($conn,$sql);
+    header("location:http://localhost/dbms/main.html");
+}
+
+
+
+
+?>
+main.html
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DATABASE</title>
+    <style>
+        body {
+            background-image: url("https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg?w=2000");
+
+
+        }
+
+
+        button {
+            background-color: peachpuff;
+            color: brown;
+            text-align: center;
+            height: 50px;
+            width: 80 px;
+            border: 2px solid black;
+            border-radius: 5px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+
+<body>
+    <center>
+        <h1>EMPLOYEE DETAILS</h1>
+
+
+        <form action="http://localhost/dbms/index.php">
+            <button><b>VIEW</b></button>
+
+
+        </form>
+        <br>
+        <form action="http://localhost/dbms/insert.php">
+            <button><b>INSERT</b></button>
+
+
+        </form>
+        <br>
+        <form action="http://localhost/dbms/delete1.php">
+            <button><b>DELETE</b></button>
+
+
+        </form>
+
+
+        <br>
+        <form action="http://localhost/dbms/update.php">
+            <button><b>UPDATE</b></button>
+        </form>
+    </center>
+</body>
+
+
+</html>
+
+update.php
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <center>
+    <form action="update1.php">
+        <label for="eno">Eno</label>
+        <input type="number" name="eno" id="eno">
+        <br>
+        <label for="new">New name</label>
+        <input type="text" name="new" id="new">
+        <br>
+        <button type="submit">UPDATE</button>
+
+
+    </form>
+    </center>
+</body>
+</html>
+
+update1.php
+<?php
+include_once 'db.php';
+$no = $_GET['eno'];
+$result = mysqli_query($conn,"SELECT * from emp where id='$no';");
+if(mysqli_num_rows($result)>0){
+    $new = $_GET['new'];
+    $sql="UPDATE emp set name='$new' where id='$no';";
+    mysqli_query($conn,$sql);
+    header("location:http://localhost/dbms/index.php");
+}
